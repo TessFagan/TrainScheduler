@@ -1,0 +1,183 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Train Scheduler</title>
+</head>
+
+<body>
+
+    <div class="Jumbotron">
+
+        <!-- first row -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <h1 class="display-4">Train Schedule</h1>
+                        <p class="lead">On time, feeling fine🔥</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <!-- 2nd row -->
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Train Name</th>
+                            <th scope="col">Destination</th>
+                            <th scope="col">Frequency</th>
+                            <th scope="col">Next Arrival</th>
+                            <th scope="col">Minutes Away</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                            <td>@mdo</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>@fat</td>
+                            <td>@mdo</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>Larry</td>
+                            <td>the Bird</td>
+                            <td>@twitter</td>
+                            <td>@mdo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+
+
+        <!-- third row -->
+
+        <div class="row">
+            <div class="col-sm-12">
+
+                <p class="lead">Train Input Here</p>
+                <form>
+                    <div class="form-group">
+                        <label for="TrainName">Train Name</label>
+                        <input type="text" class="form-control" id="trainName" placeholder="Enter Train Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="Destination">Destination</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="Frequency">Frequency</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="submitbutton">Submit</button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- script stuff here -->
+
+
+    <!-- firebase -->
+
+    <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyD9r7l2NpQE71veThy5Z_ltgtWrNiEwrus",
+            authDomain: "fir-trainschedulerhw.firebaseapp.com",
+            databaseURL: "https://fir-trainschedulerhw.firebaseio.com",
+            projectId: "fir-trainschedulerhw",
+            storageBucket: "fir-trainschedulerhw.appspot.com",
+            messagingSenderId: "1068362727106"
+        };
+        firebase.initializeApp(config);
+        // access firebase here
+        var database = firebase.database();
+    </script>
+
+    <!-- jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#submitbutton").on("click", function (event) {
+                event.preventDefault();
+
+                var trainName = $("trainname").val().trim();
+                var trainDestination = $("#train")
+
+                database.ref().push({
+                    trainName: trainName,
+                    trainDestination: trainDestination,
+                    firstTime: firstTime,
+                    frequency: frequency,
+                });
+            }
+
+            )
+        })
+
+        database.ref().on("child_added", function (snapshot) {
+            var data = snapshot.val()
+            // calculate next arrival
+
+            var nextArrival = "I don't know yet"
+            // calculate min away
+
+            var minutesAway = 99;
+            // i think above is a placeholder
+
+            var html = `
+            <tr>
+                <td>${data.trainName}</td>
+                <td>${data.trainDestination}</td>
+                <td>${data.frequency}</td>
+                <td>${nextArrival}</td>
+                <td>${minutesAway}</td>
+
+                </td> `;
+        });
+    </script>
+
+
+</body>
+<!-- 
+// ES6 VERSION - IF NAME OF VARIABLE BEING PUSHED IS EXACTLY THE SAME AS THE KEY NAME YOU CAN JUST WRITE:
+// database.ref().push(){
+// trainName,trainDestination,firstTime,frequency})
+// } -->
+
+<!-- go to train predictions example activity -->
+
+</html>
