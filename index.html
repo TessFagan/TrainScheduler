@@ -85,11 +85,11 @@
                     </div>
                     <div class="form-group">
                         <label for="Frequency">Frequency (In Minutes)</label>
-                        <input type="text" class="form-control" id="frequency" placeholder="Enter Frequency">
+                        <input type="number" class="form-control" id="frequency" placeholder="Enter Frequency">
                     </div>
                     <div class="form-group">
                         <label for=" first train time">First Train Time</label>
-                        <input type="text" class="form-control" id="firstTime" placeholder="Enter First Train Time">
+                        <input type="time" class="form-control" id="firstTime" placeholder="Enter First Train Time">
                     </div>
                     <button type="submit" class="btn btn-primary" id="submitbutton">Submit</button>
                 </form>
@@ -124,16 +124,31 @@
     <!-- jquery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
+    <!-- moment JS -->
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
+
     <script type="text/javascript">
+
+        var NowMoment = " "
+        var firstTimeConverted = " "
+        var trainName = " "
+        var trainDestination = " "
+        var frequency = " "
+        var firstTime = " "
+
+
         $(document).ready(function () {
 
             $("#submitbutton").on("click", function (event) {
                 event.preventDefault();
 
-                var trainName = $("#trainName").val().trim();
-                var trainDestination = $("#trainDestination").val().trim();
-                var frequency = $("#frequency").val().trim();
-                var firstTime = $("#firstTime").val().trim();
+                trainName = $("#trainName").val().trim();
+                trainDestination = $("#trainDestination").val().trim();
+                frequency = $("#frequency").val().trim();
+                firstTime = $("#firstTime").val().trim();
+                console.log(firstTime)
+                console.log(frequency)
 
                 database.ref().push({
                     trainName: trainName,
@@ -145,27 +160,33 @@
         })
 
         database.ref().on("child_added", function (snapshot) {
+
             var data = snapshot.val()
-            // calculate next arrival
+            var firstTimeConverted = moment(data.firstTime, "HH:mm").subtract(1, "years");
+            var currentTime = moment();
+            var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+            var tRemainder = diffTime % data.frequency;
+            var tMinutesTillTrain = data.frequency - tRemainder;
 
-            var nextArrival = "I don't know yet"
-            // calculate min away
+            // Next train is what time the next train is coming
+            var nextTrain = moment().add(tMinutesTillTrain, "minutes");
 
-            var minutesAway = 99;
-            // i think above is a placeholder
+            // var minutesAway is the diferrence between now and the next train
+            var minutesAway = nextTrain.diff(moment(), "minutes");
 
             var html = `
             <tr>
                 <td>${data.trainName}</td>
                 <td>${data.trainDestination}</td>
                 <td>${data.frequency}</td>
-                <td>${nextArrival}</td>
+                <td>${nextTrain}</td>
                 <td>${minutesAway}</td>
 
                 </td> `;
 
             $("#appenddatahere").append(html)
         });
+
     </script>
 
 
